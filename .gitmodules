@@ -1,0 +1,3 @@
+[submodule "Host/kria-vitis-platforms"]
+	path = Host/kria-vitis-platforms
+	url = https://github.com/vpolda/kria-vitis-platforms.git
