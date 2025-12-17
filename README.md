@@ -17,14 +17,14 @@ This section is not a complete tutorial, but instead includes highlights or key 
 ### Dependencies
 
 Host
-Linux - Will not work on WSL or without significant workarounds on Windows
-Kria Platform and overlay base - https://github.com/Xilinx/kria-vitis-platforms
-Vivado & Vitis **2023.1** - For building Kria Platforms and overlays
-Serial port monitor - like Putty, minicom, Tera Term, etc
+Linux - Will not work on WSL or without significant workarounds on Windows  
+Kria Platform and overlay base - https://github.com/Xilinx/kria-vitis-platforms  
+Vivado & Vitis **2023.1** - For building Kria Platforms and overlays  
+Serial port monitor - like Putty, minicom, Tera Term, etc  
 
 Target
-KriaKV260 board - Running default Ubuntu image
-Vitis AI **v2.5** - https://github.com/Xilinx/Vitis-AI.git
+KriaKV260 board - Running default Ubuntu image  
+Vitis AI **v2.5** - https://github.com/Xilinx/Vitis-AI.git  
 
 ### Building
 
