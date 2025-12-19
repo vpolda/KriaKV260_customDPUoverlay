@@ -164,8 +164,9 @@ int main(int argc, char* argv[]) {
     std::cerr << "Failed to open topk.csv\n";
     return -1;
   }
-    csv << "Class ID, confidence, name\n";
-    csv.close();
+    csv << "Time";
+    //csv << "Class ID, confidence, name";
+    csv << "\n";
     
   // ADDED
 
@@ -192,43 +193,47 @@ int main(int argc, char* argv[]) {
       input->sync_for_write(0, input->get_tensor()->get_data_size() /
                                    input->get_tensor()->get_shape()[0]);
     }
-    // start the dpu
-    auto v = runner->execute_async(input_tensor_buffers, output_tensor_buffers);
-    auto status = runner->wait((int)v.first, -1);
-    CHECK_EQ(status, 0) << "failed to run dpu";
-    // sync data for output
-    for (auto& output : output_tensor_buffers) {
 
-     std::ofstream csv("topk.csv", std::ios::app);
-      if (!csv) {
-        std::cerr << "Failed to open topk.csv\n";
-        return -1;
-      }
-
-      // start
-      auto start = std::chrono::high_resolution_clock::now();
-        
-      output->sync_for_read(0, output->get_tensor()->get_data_size() /
-                                   output->get_tensor()->get_shape()[0]);
-      // end
-      auto end = std::chrono::high_resolution_clock::now();
-      // duration in milliseconds
-      double ms = std::chrono::duration<double, std::milli>(end - start).count();
-      csv << ms << "\n";
-      csv.close();
-        
-    }
       
-    // postprocessing
-    for (auto batch_idx = 0; batch_idx < run_batch; ++batch_idx) {
-      auto topk =
-          post_process(output_tensor_buffers[0], output_scale, batch_idx);
-      // print the result
-      print_topk(topk);
-    }
+    // Run through each batch L times
+    for (auto j = 0; j < 100; ++j){
+        // start the dpu
+        auto v = runner->execute_async(input_tensor_buffers, output_tensor_buffers);
+        auto status = runner->wait((int)v.first, -1);
+        CHECK_EQ(status, 0) << "failed to run dpu";
+        // sync data for output
+        for (auto& output : output_tensor_buffers) {
+    
+         
+    
+          // start
+          auto start = std::chrono::high_resolution_clock::now();
+            
+          output->sync_for_read(0, output->get_tensor()->get_data_size() /
+                                       output->get_tensor()->get_shape()[0]);
+          // end
+          auto end = std::chrono::high_resolution_clock::now();
+          // duration in milliseconds
+          double ms = std::chrono::duration<double, std::milli>(end - start).count();
+          csv << ms << "\n";
+            
+        }
+          
+        // postprocessing
+        for (auto batch_idx = 0; batch_idx < run_batch; ++batch_idx) {
+          auto topk =
+              post_process(output_tensor_buffers[0], output_scale, batch_idx);
+          // print the result
+          //print_topk(topk);
+        }
+      }
+      // Close CSV file
+      csv << "\n";
+      //csv.close();
+      
   }
 
-  
+  csv.close();
   return 0;
 }
 
@@ -296,10 +301,9 @@ static void print_topk(const std::vector<std::pair<int, float>>& topk) {
     // ADDED
     csv << v.first << ","
         << v.second << ","
-        << '"' << lookup(v.first) << '"' << "\n";
+        << lookup(v.first) << "\n";
     // ADDED
   }
-  csv << "\n";
   csv.close(); 
     
   std::cout << std::endl;
