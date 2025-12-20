@@ -198,25 +198,21 @@ int main(int argc, char* argv[]) {
     // Run through each batch L times
     for (auto j = 0; j < 100; ++j){
         // start the dpu
+        auto start = std::chrono::high_resolution_clock::now();
+        
         auto v = runner->execute_async(input_tensor_buffers, output_tensor_buffers);
         auto status = runner->wait((int)v.first, -1);
+        
+        auto end = std::chrono::high_resolution_clock::now();
+        double ms = std::chrono::duration<double, std::milli>(end - start).count();
+        csv << ms << "\n";
+
         CHECK_EQ(status, 0) << "failed to run dpu";
+        
         // sync data for output
         for (auto& output : output_tensor_buffers) {
-    
-         
-    
-          // start
-          auto start = std::chrono::high_resolution_clock::now();
-            
           output->sync_for_read(0, output->get_tensor()->get_data_size() /
                                        output->get_tensor()->get_shape()[0]);
-          // end
-          auto end = std::chrono::high_resolution_clock::now();
-          // duration in milliseconds
-          double ms = std::chrono::duration<double, std::milli>(end - start).count();
-          csv << ms << "\n";
-            
         }
           
         // postprocessing
