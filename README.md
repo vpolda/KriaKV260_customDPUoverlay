@@ -9,12 +9,7 @@ The following two DPU architectures of the DPUCZDX8G were used: the b4096 and th
 Resnet50 was used as the CNN for comparision of the DPUs as there were plenty of examples and resources available. The images used are found under ```Target/images```.
 
 ## Results
-The following data and results are not complete and only show a small portion, 20 images, of samples repeated 100 times for data. 
-
-Data collected is stored in the ```Results``` folder, time_b1600.csv and time_b4096.csv respectively for the different architectures. 
-
-![average vs time](./Results/averagevsimage.png)
-![standard deviation vs time](./Results/stddevvsimage.png)
+**Note**: 
 
 ## Setup
 
