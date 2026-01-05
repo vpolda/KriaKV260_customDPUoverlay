@@ -9,7 +9,8 @@ The following two DPU architectures of the DPUCZDX8G were used: the b4096 and th
 Resnet50 was used as the CNN for comparision of the DPUs as there were plenty of examples and resources available. The images used are found under ```Target/images```.
 
 ## Results
-**Note**: 
+**Note**: Needs significant more development and testing.
+Doing a small image comparision of the two DPU architectures, there was no variation in the confidence of the labeling/classes. Both seemed to result in the same results. 
 
 ## Setup
 
